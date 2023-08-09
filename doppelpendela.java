@@ -1,18 +1,30 @@
+/*
+ *     Copyright 1998 Ulrich Schwickerath
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *          http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import java.awt.*;
 import java.lang.*;
 import java.awt.event.*;
 import java.applet.*;
 
 public class doppelpendela extends Applet {
-  //
-  // (c) 1998 by U.Schwickerath 
-  //
-  
+
   Panel controls;
   PCanvas canvas;
   public String ms1,ms2,gs1,gs2;
 
-  
+
   protected double get_double(String name, double defval){
     String value = this.getParameter(name);
     if (value == null) return defval;
@@ -26,16 +38,16 @@ public class doppelpendela extends Applet {
     try {return Integer.parseInt(value);}
     catch (Exception e) {return defval;}
   }
-  
+
   public void params(){
   }
-  
+
   public void init(){
     int xm0,ym0,xp1,xp2,yp1,yp2;
-    
+
     setBackground(Color.white);
     setLayout(new BorderLayout());
-    //first create and 
+    //first create and
     //init the thing
 
     xp1=get_integer("xp1",-150);
@@ -47,7 +59,7 @@ public class doppelpendela extends Applet {
 
     canvas   = new PCanvas(xm0,ym0,xp1,xp2,yp1,yp2,xp1,xp2,yp1,yp2,50.,50.);
     canvas.pendel = new doppelpendel();
-    
+
     canvas.pendel.xm=xm0;
     canvas.pendel.ym=ym0;
 
@@ -55,7 +67,7 @@ public class doppelpendela extends Applet {
     canvas.pendel.x2a=xp2;
     canvas.pendel.y1a=yp1;
     canvas.pendel.y2a=yp2;
-    
+
     canvas.pendel.l1=canvas.pendel.len1o();
     canvas.pendel.l2=canvas.pendel.len2o();
     canvas.pendel.f1=canvas.pendel.phi1o();
@@ -64,7 +76,7 @@ public class doppelpendela extends Applet {
     canvas.pendel.f2o=canvas.pendel.phi2o();
 
     canvas.pendel.w1o=get_double("ohm1",0.);
-    canvas.pendel.w2o=get_double("ohm2",0.);    
+    canvas.pendel.w2o=get_double("ohm2",0.);
     canvas.pendel.g=get_double("g",9.81);
     canvas.pendel.h=get_double("h",0.02);
     canvas.pendel.h2=get_double("h2",0.02);
@@ -90,7 +102,7 @@ public class doppelpendela extends Applet {
 }
 
 class PCanvas extends doppelpendel {
-  
+
   static public doppelpendel pendel;
   static int xm,ym,x1,x2,y1,y2;
   static int       x1a,x2a,y1a,y2a;
@@ -102,8 +114,8 @@ class PCanvas extends doppelpendel {
   static int r1o,r2o;
   static double m1,m2;
   private static boolean drag1,drag2;
-  
-  
+
+
   public PCanvas(int xm, int ym, int x1, int x2, int y1, int y2,
 		 int x1a,int x2a,int y1a,int y2a, double m1, double m2){
     this.xm=xm;
@@ -128,7 +140,7 @@ class PCanvas extends doppelpendel {
 		 AWTEvent.MOUSE_MOTION_EVENT_MASK |
 		 AWTEvent.COMPONENT_EVENT_MASK |
 		 AWTEvent.KEY_EVENT_MASK);
-    
+
   }
   public PCanvas(){
     drag1=false;
@@ -137,17 +149,17 @@ class PCanvas extends doppelpendel {
 		 AWTEvent.MOUSE_MOTION_EVENT_MASK |
 		 AWTEvent.COMPONENT_EVENT_MASK |
 		 AWTEvent.KEY_EVENT_MASK);
-    
+
   }
-  
+
   public void setvelo1(String gm1){
     try{pendel.w1o=Double.valueOf(gm1).doubleValue();}
     catch (Exception e) {return;}
   }
-  
+
   public void setvelo2(String gm2){
     try{pendel.w2o=Double.valueOf(gm2).doubleValue();}
-    catch (Exception e) {return;}    
+    catch (Exception e) {return;}
   }
 
   public void setmass1(String mass1){
@@ -155,7 +167,7 @@ class PCanvas extends doppelpendel {
     catch (Exception e) {return;}
     try{redraw(xm,ym,x1a,x2a,y1a,y2a,
 	       x1,x2,y1,y2,pendel.m1,pendel.m2);}
-    catch (Exception e) {return;}    
+    catch (Exception e) {return;}
   }
 
   public void setmass2(String mass2){
@@ -163,7 +175,7 @@ class PCanvas extends doppelpendel {
     catch (Exception e) {return;}
     try{redraw(xm,ym,x1a,x2a,y1a,y2a,
 	       x1,x2,y1,y2,pendel.m1,pendel.m2);}
-    catch (Exception e) {return;}    
+    catch (Exception e) {return;}
   }
 
   public void paint_me(){
@@ -181,20 +193,20 @@ class PCanvas extends doppelpendel {
     this.y1=y1n;
     this.x2=x2n;
     this.y2=y2n;
-    
+
     redraw(pendel.xm,pendel.ym,x1a,x2a,y1a,y2a,
 	   x1n,x2n,y1n,y2n,pendel.m1,pendel.m2);
-    
+
     pendel.x1a=x1a;
     pendel.y1a=y1a;
     pendel.x2a=x2a;
     pendel.y2a=y2a;
-    
+
     f1 = pendel.f1n();
     f2 = pendel.f2n();
     w1 = pendel.w1n();
     w2 = pendel.w2n();
-    
+
     pendel.f1o=f1;
     pendel.f2o=f2;
     pendel.w1o=w1;
@@ -202,15 +214,15 @@ class PCanvas extends doppelpendel {
     controlsv1.updatew1(pendel.w1o);
     controlsv2.updatew2(pendel.w2o);
   }
-  
-  
+
+
   public void processKeyEvent(KeyEvent e){
     paint_me();
   }
-  
+
   public void processMouseEvent(MouseEvent e){
     int lastx=0,lasty=0;
-    if (e.getID()==MouseEvent.MOUSE_PRESSED){      
+    if (e.getID()==MouseEvent.MOUSE_PRESSED){
       lastx = e.getX();
       lasty = e.getY();
       if (((int) Math.abs(lastx-pendel.x1a) < 10) &&
@@ -230,7 +242,7 @@ class PCanvas extends doppelpendel {
     }
     else super.processMouseEvent(e);
   }
-  
+
   public void processMouseMotionEvent(MouseEvent e){
     if ((drag1 | drag2 ) && (e.getID() == MouseEvent.MOUSE_DRAGGED)){
       if (drag1){
@@ -257,36 +269,36 @@ class PCanvas extends doppelpendel {
     }
     else super.processMouseMotionEvent(e);
   }
-  
+
   public void paint(Graphics gr){
     loeschen(gr,xm,ym,x1a,y1a,x2a,y2a);
     malen(gr,xm,ym,x1,y1,x2,y2 );
   }
-  
+
   public void update(Graphics gr){
     paint(gr);
   }
-  
+
   public void malen(Graphics gr,int x0, int y0, int x1, int y1, int x2, int y2){
     gr.setColor(Color.black);
     gr.drawLine(x0,y0,x1,y1);
     gr.drawLine(x1,y1,x2,y2);
     gr.drawLine(x0-20,y0,x0+20,y0);
-    gr.drawLine(x0-25,y0-10,x0-20,y0);    
-    gr.drawLine(x0-20,y0-10,x0-15,y0);    
-    gr.drawLine(x0-15,y0-10,x0-10,y0);    
-    gr.drawLine(x0-10,y0-10,x0-5,y0);    
-    gr.drawLine(x0-5,y0-10,x0-0,y0);    
-    gr.drawLine(x0+0,y0-10,x0+5,y0);    
-    gr.drawLine(x0+5,y0-10,x0+10,y0);    
-    gr.drawLine(x0+10,y0-10,x0+15,y0);    
-    gr.drawLine(x0+15,y0-10,x0+20,y0);    
+    gr.drawLine(x0-25,y0-10,x0-20,y0);
+    gr.drawLine(x0-20,y0-10,x0-15,y0);
+    gr.drawLine(x0-15,y0-10,x0-10,y0);
+    gr.drawLine(x0-10,y0-10,x0-5,y0);
+    gr.drawLine(x0-5,y0-10,x0-0,y0);
+    gr.drawLine(x0+0,y0-10,x0+5,y0);
+    gr.drawLine(x0+5,y0-10,x0+10,y0);
+    gr.drawLine(x0+10,y0-10,x0+15,y0);
+    gr.drawLine(x0+15,y0-10,x0+20,y0);
     gr.setColor(Color.red);
     gr.fillArc(x1-r1/2,y1-r1/2,r1,r1,0,360);
     gr.setColor(Color.green);
     gr.fillArc(x2-r2/2,y2-r2/2,r2,r2,0,360);
   }
-  
+
   public void loeschen(Graphics gr,int x0, int y0, int x1, int y1, int x2, int y2){
     gr.setColor(Color.white);
     gr.fillArc(x1-r1o/2,y1-r1o/2,r1o,r1o,0,360);
@@ -294,7 +306,7 @@ class PCanvas extends doppelpendel {
     gr.drawLine(x0,y0,x1,y1);
     gr.drawLine(x1,y1,x2,y2);
   }
-  
+
   public void redraw(int xm, int ym, int x1a, int x2a, int y1a, int y2a,
 		                     int x1,int x2,int y1,int y2, double m1, double m2){
     this.xm=xm;
@@ -315,16 +327,16 @@ class PCanvas extends doppelpendel {
     this.r2=(int) Math.round((double) Math.pow(m2,1/2.));
     Graphics g=this.getGraphics();
     paint(g);
-  }  
+  }
 }
 
 class ControlsVelo1 extends Panel
                      implements ActionListener {
-  
+
   TextField gesc1;
   String gs1;
   PCanvas canvas;
-  
+
   public ControlsVelo1(String gs1,PCanvas canvas){
     this.canvas=canvas;
     Button b=null;
@@ -332,7 +344,7 @@ class ControlsVelo1 extends Panel
     this.gs1=gs1;
     add(l3 = new Label("Geschw. m1:"));
     add(gesc1 = new TextField(gs1, 20));
-    
+
     b = new Button("OK");
     b.addActionListener(this);
     add(b);
@@ -340,7 +352,7 @@ class ControlsVelo1 extends Panel
   }
 
   public void updatew1(double v){gesc1.setText(String.valueOf(v));}
-		       
+
   public void actionPerformed(ActionEvent ev) {
     String label = ev.getActionCommand();
     if (label.equals("OK")){
@@ -348,16 +360,16 @@ class ControlsVelo1 extends Panel
       canvas.setvelo1(gs1);
     }
   }
-}  
+}
 
 
 class ControlsVelo2 extends Panel
                      implements ActionListener {
-  
+
   TextField gesc2;
   String gs2;
   PCanvas canvas;
-  
+
   public ControlsVelo2(String gs2,PCanvas canvas){
     this.gs2=gs2;
     this.canvas=canvas;
@@ -365,7 +377,7 @@ class ControlsVelo2 extends Panel
     Label  l4 =null;
     add(l4 = new Label("Geschw. m2:"));
     add(gesc2 = new TextField(gs2, 20));
-    
+
     b = new Button("OK");
     b.addActionListener(this);
     add(b);
@@ -373,7 +385,7 @@ class ControlsVelo2 extends Panel
   }
 
   public void updatew2(double v){gesc2.setText(String.valueOf(v));}
-		       
+
   public void actionPerformed(ActionEvent ev) {
     String label = ev.getActionCommand();
     if (label.equals("OK")){
@@ -381,12 +393,12 @@ class ControlsVelo2 extends Panel
       canvas.setvelo2(gs2);
     }
   }
-}  
+}
 
 
 class ControlsMass1 extends Panel
                      implements ActionListener {
-  
+
   TextField mass1;
   String ms1;
   PCanvas canvas;
@@ -398,7 +410,7 @@ class ControlsMass1 extends Panel
     Label  l1 =null;
     add(l1 = new Label("erste Masse:"));
     add(mass1 = new TextField(ms1, 4));
-    
+
     b = new Button("OK");
     b.addActionListener(this);
     add(b);
@@ -413,11 +425,11 @@ class ControlsMass1 extends Panel
       canvas.setmass1(ms1);
     }
   }
-}  
+}
 
 class ControlsMass2 extends Panel
                      implements ActionListener {
-  
+
   TextField mass2;
   String ms2;
   PCanvas canvas;
@@ -429,7 +441,7 @@ class ControlsMass2 extends Panel
     Label  l2 =null;
     add(l2 = new Label("zweite Masse:"));
     add(mass2 = new TextField(ms2, 4));
-    
+
     b = new Button("OK");
     b.addActionListener(this);
     add(b);
@@ -444,6 +456,4 @@ class ControlsMass2 extends Panel
       canvas.setmass2(ms2);
     }
   }
-}  
-
-
+}

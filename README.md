@@ -8,6 +8,8 @@ This is a little java applet based simulation of a pendulum, made as an applet w
 ```
 javac doppelpendela.java
 javac doppelpendel.java
-
+```
 ## Running
+```
 appletviewer doppelpendel.html
+```
